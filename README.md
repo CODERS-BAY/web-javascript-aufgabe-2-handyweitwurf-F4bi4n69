@@ -15,6 +15,7 @@
    - Mond 1.62 m/s²
    - Mars 3.69 m/s²
    - Jupiter 24.79 m/s²
+   - Sonne 274 m/s²
 
 - `var v0` ist die Anfangsgeschwindigkeit und ist mit einem Formular und einem Inputfeld vom User einzugeben
 
