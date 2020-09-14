@@ -1,63 +1,88 @@
-var versuche;
+
 var g;          // Fallbeschleunigung \\
-var winkel;          // Wurfwinkel \\
 var miss;          // Gibt an wie um viel der Spieler das Ziel verpasst hat \\
 var entfernung;          // Speichert den zufälligen Wert für die Entfernung \\
-// var v0;          // Anfangsgeschiwndigkeit \\
-var wurfweite;          // Berechnet sich auf Wurfwinkel und Anfangsgeschwindigkeit \\
+var anfang;          // Anfangsgeschiwndigkeit \\
 var verbleibend;
-var geschossen = 1;
+var geworfen = 0;
+var versuche;
+var anfang;
+var winkel;
+var wurfweite;
+
+///// Werte für Fallbeschleunigung \\\\\
+function pl1() {if (geworfen==0) g = 9.81;}
+function pl2() {if (geworfen==0) g = 1.62;}
+function pl3() {if (geworfen==0) g = 3.69;}
+function pl4() {if (geworfen==0) g = 24.79;}
+function pl5() {if (geworfen==0) g = 274;}
 
 
-var v0 = document.getElementById("kraft").value;
-var winkel = document.getElementById("winkel").value;
-var versuche = document.getElementById("schuesse").value;
-
-function pl1() {g = 9.81;}
-function pl2() {g = 1.62;}
-function pl3() {g = 3.69;}
-function pl4() {g = 24.79;}
-function pl5() {g = 274;}
 
 function start() {
+    if (geworfen == 0)
+    versuche = document.getElementById("schuesse").value;
+    anfang = document.getElementById("anfang").value;
+    winkel = document.getElementById("winkel").value;
+
+    geworfen++;
+    verbleibend--;
+
     derwinkel();
     zahlenausgabe();
-    verbleibend = versuche;
-    geschossen++;
-    verbleibend--;
 }
 
-function zahlenausgabe() {
-    document.getElementById("verbleibend2").innerHTML = verbleibend;
-    document.getElementById("geschossen2").innerHTML = geschossen;
-}
-
+///// Berechnung des Winkels \\\\\
 function derwinkel() {
-    winkel= winkel* (Math.PI/180);
+    winkel= winkel * ( Math.PI / 180);
     weite();
 }
 
+///// Berechnung für die Wurfweite \\\\\
 function weite() {
-    wurfweite = ((v0 * v0) + Math.sin(2 * winkel)) / g;
+    wurfweite = ((anfang * anfang) + Math.sin(2 * winkel)) / g;
+    wurfweite = Math.round(wurfweite); 
+
     entfernungMonster();
 }
 
-// function entfernungMonster() {
-//     entfernung = Math.random() * 90 + 10;
-//     entfernung = Math.round(entfernung);
-//     auswertung();
+///// Berechnet die Entfernung zum Monster \\\\\
+function entfernungMonster() {
+
+    if (geworfen == 1) {
+    entfernung = Math.random() * 90 + 10;
+    entfernung = Math.round(entfernung);
+    }
+
+    miss = entfernung - wurfweite;
+    auswertung();
     
-// }
+}
 
-// function auswertung() {
+///// Ausgabe für Verbleibend und Geworfen \\\\\
+function zahlenausgabe() {
 
-//     miss = entfernung - wurfweite;
+    if (geworfen == 1) {
+        verbleibend = versuche;
+        verbleibend--;
+    }
 
-//     if (entfernung == wurfweite) {
-//         alert ("Du hast getroffen!")
-//     } else {
-//         alert ("Du hast um " + miss + "m daneben geschossen!")
-//     }
-// }
+    document.getElementById("verbleibend2").innerHTML = verbleibend;
+    document.getElementById("geschossen2").innerHTML = geworfen;
 
-alert(v0);
+    if (geworfen == versuche) {
+        alert ("Leider hast du keine verbleibende Schüsse mehr!")
+        location.reload();
+    }
+
+}
+
+function auswertung() {
+
+    if (entfernung == wurfweite) {
+        alert ("Du hast getroffen!")
+        location.reload();
+    } else {
+        alert ("Du hast um " + miss + "m daneben geschossen!")
+    }
+}
